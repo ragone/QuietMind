@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">QuietMind</string>
+    <string name="action_settings">Settings</string>
+    <string name="time"><b>Time</b> (in minutes):</string>
+</resources>
