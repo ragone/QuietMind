@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="library-1.1.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.lantouzi.wheelview/library/1.1.1/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.lantouzi.wheelview/library/1.1.1/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.lantouzi.wheelview/library/1.1.1/6ba039c5bf3f04cfddb7717184792edebf713dd3/library-1.1.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

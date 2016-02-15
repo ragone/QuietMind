@@ -10,6 +10,7 @@
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="ragone.io.quietmind.MainActivity"
+    android:keepScreenOn="true"
     tools:showIn="@layout/activity_main">
 
         <ImageView
@@ -107,42 +108,42 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="20dp"
-                    android:src="@drawable/check_green"/>
+                    android:src="@drawable/blank"/>
 
-                <ImageView
+                <ImageView android:id="@+id/tuesday_check"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="20dp"
-                    android:src="@drawable/check_green"/>
+                    android:src="@drawable/blank"/>
 
-                <ImageView
+                <ImageView android:id="@+id/wednesday_check"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="20dp"
-                    android:src="@drawable/check_green"/>
+                    android:src="@drawable/blank"/>
 
-                <ImageView
+                <ImageView android:id="@+id/thursday_check"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="20dp"
-                    android:src="@drawable/check_green"/>
+                    android:src="@drawable/blank"/>
 
-                <ImageView
+                <ImageView android:id="@+id/friday_check"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="20dp"
-                    android:src="@drawable/check_green"/>
+                    android:src="@drawable/blank"/>
 
-                <ImageView
+                <ImageView android:id="@+id/saturday_check"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="20dp"
-                    android:src="@drawable/check_green"/>
+                    android:src="@drawable/blank"/>
 
-                <ImageView
+                <ImageView android:id="@+id/sunday_check"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/check_green"/>
+                    android:src="@drawable/blank"/>
 
             </GridLayout>
 
@@ -172,26 +173,26 @@
             app:lwvIntervalFactor="3"
             app:lwvMarkRatio="0.5"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        <!--<LinearLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content">-->
 
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/enableBells"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:thumb="@drawable/thumb_bg"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                />
+            <!--<android.support.v7.widget.SwitchCompat-->
+                <!--android:id="@+id/enableBells"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:thumb="@drawable/thumb_bg"-->
+                <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+                <!--/>-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Bells before/after meditation"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:textColor="@color/white"/>
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Bells after meditation"-->
+                <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+                <!--android:textColor="@color/white"/>-->
 
-        </LinearLayout>
+        <!--</LinearLayout>-->
 
     </LinearLayout>
 
