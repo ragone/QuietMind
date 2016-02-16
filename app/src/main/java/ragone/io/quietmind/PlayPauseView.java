@@ -11,6 +11,7 @@ import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 import android.util.Property;
 import android.view.View;
@@ -18,7 +19,7 @@ import android.view.ViewOutlineProvider;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
-public class PlayPauseView extends FrameLayout {
+public class PlayPauseView extends FloatingActionButton {
 
     private static final Property<PlayPauseView, Integer> COLOR =
             new Property<PlayPauseView, Integer>(Integer.class, "color") {

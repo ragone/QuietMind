@@ -104,43 +104,43 @@
                     android:paddingBottom="10dp"
                     android:text="S"/>
 
-                <ImageView android:id="@+id/monday_check"
+                <ragone.io.quietmind.MyImageView android:id="@+id/monday_check"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="20dp"
                     android:src="@drawable/blank"/>
 
-                <ImageView android:id="@+id/tuesday_check"
+                <ragone.io.quietmind.MyImageView android:id="@+id/tuesday_check"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="20dp"
                     android:src="@drawable/blank"/>
 
-                <ImageView android:id="@+id/wednesday_check"
+                <ragone.io.quietmind.MyImageView android:id="@+id/wednesday_check"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="20dp"
                     android:src="@drawable/blank"/>
 
-                <ImageView android:id="@+id/thursday_check"
+                <ragone.io.quietmind.MyImageView android:id="@+id/thursday_check"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="20dp"
                     android:src="@drawable/blank"/>
 
-                <ImageView android:id="@+id/friday_check"
+                <ragone.io.quietmind.MyImageView android:id="@+id/friday_check"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="20dp"
                     android:src="@drawable/blank"/>
 
-                <ImageView android:id="@+id/saturday_check"
+                <ragone.io.quietmind.MyImageView android:id="@+id/saturday_check"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="20dp"
                     android:src="@drawable/blank"/>
 
-                <ImageView android:id="@+id/sunday_check"
+                <ragone.io.quietmind.MyImageView android:id="@+id/sunday_check"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/blank"/>
