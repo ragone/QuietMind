@@ -9,7 +9,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.lantouzi.wheelview.WheelView;
 
@@ -28,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private int currentDay;
     private int count = 0;
     private CoordinatorLayout coordinatorLayout;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +35,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         setupDays();
-
-        Calendar calendar = Calendar.getInstance();
-        currentDay = calendar.get(Calendar.DAY_OF_WEEK);
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
 
@@ -50,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
                 if (view.getDrawable().isPlay()) {
                     setInputFieldEnabled(false);
                     showSnackBar();
-                    MediaPlayer.create(MainActivity.this, R.raw.bell2).start();
+                    mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.bell2);
+                    mediaPlayer.start();
                     selectedTime = wheelView.getSelectedPosition() + 1;
                     timer = new CountDownTimer(selectedTime * 60000, 1000) {
                         @Override
@@ -84,10 +82,16 @@ public class MainActivity extends AppCompatActivity {
                             days.get(currentDay - 1).setImageResource(R.drawable.check_green);
                             days.get(currentDay - 1).setIsCompleted(true);
                             saveData();
+                            if(isAllDaysCompleted()) {
+                                // Show dialog to increase time
+                            }
                         }
                     }.start();
                 } else {
                     timer.cancel();
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                    mediaPlayer = null;
                     setInputFieldEnabled(true);
                     wheelView.smoothSelectIndex(selectedTime - 1);
                 }
@@ -142,17 +146,27 @@ public class MainActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         currentDay = calendar.get(Calendar.DAY_OF_WEEK);
 
-        if(currentDay == Calendar.MONDAY && (tuesday.isCompleted() ||
-                wednesday.isCompleted() ||
-                thursday.isCompleted() ||
-                friday.isCompleted() ||
-                saturday.isCompleted() ||
-                sunday.isCompleted())) {
-
-            for(MyImageView day : days) {
-                day.setIsCompleted(false);
+        // if any days after current day in week are completed,
+        // new week must have started so set all days to not completed.
+        boolean isNewWeek = false;
+        if(currentDay != Calendar.SUNDAY) {
+            for (int i = currentDay + 1; i < days.size(); i++) {
+                if (days.get(i).isCompleted()) {
+                    isNewWeek = true;
+                    break;
+                }
             }
+        }
 
+        if(isNewWeek) {
+            sunday.setIsCompleted(false);
+            monday.setIsCompleted(false);
+            tuesday.setIsCompleted(false);
+            wednesday.setIsCompleted(false);
+            thursday.setIsCompleted(false);
+            friday.setIsCompleted(false);
+            saturday.setIsCompleted(false);
+            saveData();
         }
 
         for(MyImageView day : days) {
@@ -196,5 +210,16 @@ public class MainActivity extends AppCompatActivity {
     private boolean isDayComplete(String day) {
         SharedPreferences prefs = getSharedPreferences(MY_PREF, MODE_PRIVATE);
         return prefs.getBoolean(day, false);
+    }
+
+    private boolean isAllDaysCompleted() {
+        boolean result = true;
+        for(MyImageView day : days) {
+            if(!day.isCompleted()) {
+                result = false;
+                break;
+            }
+        }
+        return result;
     }
 }

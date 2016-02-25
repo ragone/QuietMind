@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
+import java.util.Calendar;
+
 public class MyImageView extends ImageView {
 
     private boolean isCompleted = false;
