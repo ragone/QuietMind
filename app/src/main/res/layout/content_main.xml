@@ -40,112 +40,23 @@
 
         </View>
 
-        <GridLayout
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:text="STREAK"-->
+            <!--android:textColor="@color/dark_gray"/>-->
+
+        <LinearLayout android:id="@+id/dayLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="20dp"
-                android:columnCount="7"
-                android:rowCount="2">
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:layout_gravity="center"
-                    android:paddingRight="20dp"
-                    android:paddingBottom="10dp"
-                    android:text="M"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:layout_gravity="center"
-                    android:paddingRight="20dp"
-                    android:paddingBottom="10dp"
-                    android:text="T"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:layout_gravity="center"
-                    android:paddingRight="20dp"
-                    android:paddingBottom="10dp"
-                    android:text="W"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:layout_gravity="center"
-                    android:paddingRight="20dp"
-                    android:paddingBottom="10dp"
-                    android:text="T"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:layout_gravity="center"
-                    android:paddingRight="20dp"
-                    android:paddingBottom="10dp"
-                    android:text="F"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:layout_gravity="center"
-                    android:paddingRight="20dp"
-                    android:paddingBottom="10dp"
-                    android:text="S"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:layout_gravity="center"
-                    android:paddingBottom="10dp"
-                    android:text="S"/>
+            <!-- Checkboxes -->
 
-                <ragone.io.quietmind.MyImageView android:id="@+id/monday_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="20dp"
-                    android:src="@drawable/blank"/>
-
-                <ragone.io.quietmind.MyImageView android:id="@+id/tuesday_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="20dp"
-                    android:src="@drawable/blank"/>
-
-                <ragone.io.quietmind.MyImageView android:id="@+id/wednesday_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="20dp"
-                    android:src="@drawable/blank"/>
-
-                <ragone.io.quietmind.MyImageView android:id="@+id/thursday_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="20dp"
-                    android:src="@drawable/blank"/>
-
-                <ragone.io.quietmind.MyImageView android:id="@+id/friday_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="20dp"
-                    android:src="@drawable/blank"/>
-
-                <ragone.io.quietmind.MyImageView android:id="@+id/saturday_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="20dp"
-                    android:src="@drawable/blank"/>
-
-                <ragone.io.quietmind.MyImageView android:id="@+id/sunday_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/blank"/>
-
-            </GridLayout>
+            </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

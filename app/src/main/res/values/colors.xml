@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#232526</color>
+    <color name="colorPrimaryDark">#252F38</color>
     <color name="colorAccent">#FF4081</color>
     <color name="float_color">#28A69A</color>
     <color name="white">#ffffff</color>
-    <color name="ruler">#1A979797</color>
+    <color name="ruler">#80979797</color>
+    <color name="dark_gray">#eeeeee</color>
 </resources>

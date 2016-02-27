@@ -2,16 +2,23 @@ package ragone.io.quietmind;
 
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.lantouzi.wheelview.WheelView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
@@ -20,14 +27,25 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private static final String MY_PREF = "my_prefs";
+    private final String STREAK = "streak";
+    private final String TIME = "time";
+    private final String LAST_DAY = "lastday";
     private WheelView wheelView;
     private CountDownTimer timer;
     private int selectedTime;
-    private List<MyImageView> days;
-    private int currentDay;
+    private List<SmoothCheckBox> days;
+    private String lastDay;
     private int count = 0;
     private CoordinatorLayout coordinatorLayout;
     private MediaPlayer mediaPlayer;
+    private int streak;
+    private PlayPauseView playPauseView;
+    private LinearLayout dayLayout;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient mClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,56 +55,31 @@ public class MainActivity extends AppCompatActivity {
         setupDays();
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+        wheelView = (WheelView) findViewById(R.id.wheel);
+        playPauseView = (PlayPauseView) findViewById(R.id.play_pause_view);
 
-        final PlayPauseView view = (PlayPauseView) findViewById(R.id.play_pause_view);
-        view.toggle();
-        view.setOnClickListener(new View.OnClickListener() {
+        setupPlayPauseButton();
+        setupWheel();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        mClient = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    private void setupPlayPauseButton() {
+        playPauseView.toggle();
+        playPauseView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                view.toggle();
-                if (view.getDrawable().isPlay()) {
+                days.get(0).setText("12");
+
+                playPauseView.toggle();
+                if (playPauseView.getDrawable().isPlay()) {
                     setInputFieldEnabled(false);
                     showSnackBar();
                     mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.bell2);
                     mediaPlayer.start();
                     selectedTime = wheelView.getSelectedPosition() + 1;
-                    timer = new CountDownTimer(selectedTime * 60000, 1000) {
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-                            int timeLeftInMinutes = (int) Math.ceil(millisUntilFinished / 60000);
-                            wheelView.smoothSelectIndex(timeLeftInMinutes);
-                        }
-
-                        @Override
-                        public void onFinish() {
-                            MediaPlayer mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.bell1);
-                            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                                int maxCount = 2;
-
-                                @Override
-                                public void onCompletion(MediaPlayer mediaPlayer) {
-                                    if (count < maxCount) {
-                                        count++;
-                                        mediaPlayer.seekTo(0);
-                                        mediaPlayer.start();
-                                    } else {
-                                        mediaPlayer.release();
-                                        count = 0;
-                                    }
-                                }
-                            });
-                            mediaPlayer.start();
-                            view.toggle();
-                            setInputFieldEnabled(true);
-                            wheelView.smoothSelectIndex(selectedTime - 1);
-                            days.get(currentDay - 1).setImageResource(R.drawable.check_green);
-                            days.get(currentDay - 1).setIsCompleted(true);
-                            saveData();
-                            if(isAllDaysCompleted()) {
-                                // Show dialog to increase time
-                            }
-                        }
-                    }.start();
+                    timer = new myCountDownTimer(selectedTime * 60000, 1000).start();
                 } else {
                     timer.cancel();
                     mediaPlayer.stop();
@@ -97,9 +90,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        wheelView = (WheelView) findViewById(R.id.wheel);
+    }
+
+    private void setupWheel() {
         List<String> data = new LinkedList<>();
-        for(int i = 1; i <= 60; i++) {
+        for (int i = 1; i <= 60; i++) {
             data.add(String.valueOf(i));
         }
         wheelView.setItems(data);
@@ -119,62 +114,30 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupDays() {
         days = new ArrayList<>();
-        MyImageView sunday = (MyImageView) findViewById(R.id.sunday_check);
-        MyImageView monday = (MyImageView) findViewById(R.id.monday_check);
-        MyImageView tuesday = (MyImageView) findViewById(R.id.tuesday_check);
-        MyImageView wednesday = (MyImageView) findViewById(R.id.wednesday_check);
-        MyImageView thursday = (MyImageView) findViewById(R.id.thursday_check);
-        MyImageView friday = (MyImageView) findViewById(R.id.friday_check);
-        MyImageView saturday = (MyImageView) findViewById(R.id.saturday_check);
+        dayLayout = (LinearLayout) findViewById(R.id.dayLayout);
 
-        days.add(sunday);
-        days.add(monday);
-        days.add(tuesday);
-        days.add(wednesday);
-        days.add(thursday);
-        days.add(friday);
-        days.add(saturday);
-
-        sunday.setIsCompleted(isDayComplete("sunday"));
-        monday.setIsCompleted(isDayComplete("monday"));
-        tuesday.setIsCompleted(isDayComplete("tuesday"));
-        wednesday.setIsCompleted(isDayComplete("wednesday"));
-        thursday.setIsCompleted(isDayComplete("thursday"));
-        friday.setIsCompleted(isDayComplete("friday"));
-        saturday.setIsCompleted(isDayComplete("saturday"));
-
-        Calendar calendar = Calendar.getInstance();
-        currentDay = calendar.get(Calendar.DAY_OF_WEEK);
-
-        // if any days after current day in week are completed,
-        // new week must have started so set all days to not completed.
-        boolean isNewWeek = false;
-        if(currentDay != Calendar.SUNDAY) {
-            for (int i = currentDay + 1; i < days.size(); i++) {
-                if (days.get(i).isCompleted()) {
-                    isNewWeek = true;
-                    break;
-                }
-            }
+        streak = getStreak();
+        if(!getLastDay().equals(getYesterday()) && !getLastDay().equals(getCurrentDay())) {
+            streak = 0;
         }
+        int streakRemain = streak % 7;
+        int dayStart = streak - streakRemain;
 
-        if(isNewWeek) {
-            sunday.setIsCompleted(false);
-            monday.setIsCompleted(false);
-            tuesday.setIsCompleted(false);
-            wednesday.setIsCompleted(false);
-            thursday.setIsCompleted(false);
-            friday.setIsCompleted(false);
-            saturday.setIsCompleted(false);
-            saveData();
-        }
+        for (int i = dayStart; i < dayStart + 7; i++) {
+            SmoothCheckBox checkBox = new SmoothCheckBox(MainActivity.this);
+            checkBox.setText("" + (i + 1));
+            checkBox.setEnabled(false);
+            int a = CompatUtils.dp2px(MainActivity.this, 30);
+            int b = CompatUtils.dp2px(MainActivity.this, 6);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(a, a);
+            params.setMargins(b, b, b, b);
+            checkBox.setLayoutParams(params);
 
-        for(MyImageView day : days) {
-            if(day.isCompleted()) {
-                day.setImageResource(R.drawable.check_green);
-            } else {
-                day.setImageResource(R.drawable.blank);
+            if(i < streak) {
+                checkBox.setChecked(true);
             }
+            dayLayout.addView(checkBox);
+            days.add(checkBox);
         }
     }
 
@@ -184,20 +147,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveData() {
         SharedPreferences.Editor editor = getSharedPreferences(MY_PREF, MODE_PRIVATE).edit();
-        editor.putInt("time", wheelView.getSelectedPosition());
-        editor.putBoolean("sunday", days.get(0).isCompleted());
-        editor.putBoolean("monday", days.get(1).isCompleted());
-        editor.putBoolean("tuesday", days.get(2).isCompleted());
-        editor.putBoolean("wednesday", days.get(3).isCompleted());
-        editor.putBoolean("thursday", days.get(4).isCompleted());
-        editor.putBoolean("friday", days.get(5).isCompleted());
-        editor.putBoolean("saturday", days.get(6).isCompleted());
+        editor.putInt(TIME, wheelView.getSelectedPosition());
+        editor.putInt(STREAK, streak);
+        editor.putString(LAST_DAY, lastDay);
         editor.commit();
     }
 
     private int getTime() {
         SharedPreferences prefs = getSharedPreferences(MY_PREF, MODE_PRIVATE);
-        return prefs.getInt("time", 14);
+        return prefs.getInt(TIME, 14);
+    }
+
+    private int getStreak() {
+        SharedPreferences prefs = getSharedPreferences(MY_PREF, MODE_PRIVATE);
+        return prefs.getInt(STREAK, 0);
+    }
+
+    private String getLastDay() {
+        SharedPreferences prefs = getSharedPreferences(MY_PREF, MODE_PRIVATE);
+        return prefs.getString(LAST_DAY, "");
     }
 
     private void showSnackBar() {
@@ -207,19 +175,113 @@ public class MainActivity extends AppCompatActivity {
         snackbar.show();
     }
 
-    private boolean isDayComplete(String day) {
-        SharedPreferences prefs = getSharedPreferences(MY_PREF, MODE_PRIVATE);
-        return prefs.getBoolean(day, false);
-    }
-
     private boolean isAllDaysCompleted() {
         boolean result = true;
-        for(MyImageView day : days) {
-            if(!day.isCompleted()) {
+        for (SmoothCheckBox day : days) {
+            if (!day.isChecked()) {
                 result = false;
                 break;
             }
         }
         return result;
+    }
+
+    private String getCurrentDay() {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        return dateFormat.format(cal.getTime());
+    }
+
+    private String getYesterday() {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        cal.add(Calendar.DATE, -1);
+        return dateFormat.format(cal.getTime());
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        mClient.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://ragone.io.quietmind/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(mClient, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://ragone.io.quietmind/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(mClient, viewAction);
+        mClient.disconnect();
+    }
+
+    private class myCountDownTimer extends CountDownTimer {
+        public myCountDownTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            int timeLeftInMinutes = (int) Math.ceil(millisUntilFinished / 60000);
+            wheelView.smoothSelectIndex(timeLeftInMinutes);
+        }
+
+        @Override
+        public void onFinish() {
+            MediaPlayer mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.bell1);
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                int maxCount = 2;
+
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+                    if (count < maxCount) {
+                        count++;
+                        mediaPlayer.seekTo(0);
+                        mediaPlayer.start();
+                    } else {
+                        mediaPlayer.release();
+                        count = 0;
+                    }
+                }
+            });
+            mediaPlayer.start();
+            playPauseView.toggle();
+            setInputFieldEnabled(true);
+            wheelView.smoothSelectIndex(selectedTime - 1);
+            if(!getLastDay().equals(getCurrentDay()) && getLastDay().equals(getYesterday())) {
+                streak++;
+                days.get(streak % 7 - 1).setChecked(true, true);
+            }
+            lastDay = getCurrentDay();
+            saveData();
+            if (isAllDaysCompleted()) {
+                // Show dialog to increase time
+            }
+        }
     }
 }
