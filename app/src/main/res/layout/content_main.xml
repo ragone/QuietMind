@@ -30,22 +30,16 @@
             android:src="@drawable/logo_text">
         </ImageView>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:background="@color/ruler">
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:layout_marginBottom="20dp"-->
+            <!--android:layout_marginRight="@dimen/activity_horizontal_margin"-->
+            <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+            <!--android:background="@color/ruler">-->
 
-        </View>
+        <!--</View>-->
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center_horizontal"-->
-            <!--android:text="STREAK"-->
-            <!--android:textColor="@color/dark_gray"/>-->
 
         <LinearLayout android:id="@+id/dayLayout"
                 android:layout_width="wrap_content"
@@ -57,6 +51,13 @@
             <!-- Checkboxes -->
 
             </LinearLayout>
+
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:text="LONGEST STREAK: 15 days"-->
+        <!--android:textColor="@color/dark_gray"/>-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -84,26 +85,36 @@
             app:lwvIntervalFactor="3"
             app:lwvMarkRatio="0.5"/>
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content">-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-            <!--<android.support.v7.widget.SwitchCompat-->
-                <!--android:id="@+id/enableBells"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:thumb="@drawable/thumb_bg"-->
-                <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
-                <!--/>-->
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/vipassanaMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:thumb="@drawable/thumb_bg"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                />
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="Bells after meditation"-->
-                <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
-                <!--android:textColor="@color/white"/>-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vipassanā Mode"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:textColor="@color/white"/>
 
-        <!--</LinearLayout>-->
+        </LinearLayout>
+
+        <TextView android:id="@+id/bigText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Take a deep breath"
+            android:textColor="@color/white"
+            android:layout_gravity="center_horizontal"
+                  android:layout_marginTop="40dp"
+                  android:fontFamily="sans-serif-thin"
+            android:textSize="30dp"/>
 
     </LinearLayout>
 

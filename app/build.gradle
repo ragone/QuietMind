@@ -26,4 +26,6 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile 'com.lantouzi.wheelview:library:1.1.1'
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+    compile 'cn.pedant.sweetalert:library:1.3'
+    compile 'com.github.amlcurran.showcaseview:library:5.4.1'
 }
