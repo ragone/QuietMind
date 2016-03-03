@@ -5,11 +5,13 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final String MY_PREF = "my_prefs";
     private static final String VIPASSANA = "vipassana";
+    private static final String FIRST_TIME = "first_time";
     private final String STREAK = "streak";
     private final String TIME = "time";
     private final String LAST_DAY = "lastday";
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ShowcaseView scv;
     private int counter = 0;
     private MyDrawer myDrawer;
+    private boolean firstTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,18 +100,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setupPlayPauseButton();
         setupWheel();
 
-        showShowcase();
+        if (isFirstTime()) {
+            showShowcase();
+        }
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         mClient = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
+    private boolean isFirstTime() {
+        SharedPreferences prefs = getSharedPreferences(MY_PREF, MODE_PRIVATE);
+        return prefs.getBoolean(FIRST_TIME, true);
+    }
+
 
     private void showShowcase() {
+        Handler handler = new Handler();
+        for (int i = 1; i<=days.size() ;i++) {
+            final int finalI = i;
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    days.get(finalI - 1).setChecked(true, true);
+                }
+            }, 1000 * i);
+        }
 
         ViewTarget target = new ViewTarget(R.id.dayLayout, this);
-        myDrawer = new MyDrawer(getResources(), MainActivity.this);
+        myDrawer = new MyDrawer(getResources(), MainActivity.this, days);
 
         scv = new ShowcaseView.Builder(this)
                 .setTarget(target)
@@ -128,9 +149,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 scv.setTarget(target2);
                 scv.setContentTitle("Vipassana Mode!");
                 scv.setContentText("Fixed 60 minute meditation by S. N. Goenka. Sadhu! Sadhu! Sadhu!");
+
+                Handler handler = new Handler();
+                for (int i = 1; i<=days.size() ;i++) {
+                    final int finalI = i;
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            days.get(finalI - 1).setChecked(false, true);
+                        }
+                    }, 100 * i);
+                }
                 break;
             case 1:
                 scv.hide();
+                firstTime = false;
+                saveData();
                 break;
         }
         counter++;
@@ -245,6 +279,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editor.putInt(STREAK, streak);
         editor.putString(LAST_DAY, lastDay);
         editor.putBoolean(VIPASSANA, vipassanaMode.isChecked());
+        editor.putBoolean(FIRST_TIME, firstTime);
         editor.commit();
     }
 
@@ -378,10 +413,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void onTick(long millisUntilFinished) {
-            int timeLeftInMinutes = (int) Math.ceil(millisUntilFinished / 60000);
+            int timeLeftInMinutes = (int) Math.floor(millisUntilFinished / 60000);
             wheelView.smoothSelectIndex(timeLeftInMinutes);
             if(vipassanaPlayer == null && millisUntilFinished < 809400 && vipassanaMode.isChecked()) {
                 vipassanaPlayer = MediaPlayer.create(MainActivity.this, R.raw.vipassanaend);
+                vipassanaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        vipassanaPlayer.release();
+                        vipassanaPlayer = null;
+                    }
+                });
                 vipassanaPlayer.start();
             }
         }
