@@ -1,12 +1,20 @@
 package ragone.io.quietmind;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
@@ -32,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -56,15 +65,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout dayLayout;
     private SwitchCompat vipassanaMode;
     private TextView bigText;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient mClient;
     private ShowcaseView scv;
     private int counter = 0;
     private MyDrawer myDrawer;
     private boolean firstTime;
+    private NotificationCompat.Builder mBuilder;
+    private NotificationManager notificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,10 +109,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (isFirstTime()) {
             showShowcase();
         }
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        mClient = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     private boolean isFirstTime() {
@@ -117,12 +119,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void showShowcase() {
         Handler handler = new Handler();
-        for (int i = 1; i<=days.size() ;i++) {
+        for (int i = 1; i <= days.size(); i++) {
             final int finalI = i;
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    days.get(finalI - 1).setChecked(true, true);
+                    if(counter == 0) {
+                        days.get(finalI - 1).setChecked(true, true);
+                    }
                 }
             }, 1000 * i);
         }
@@ -147,8 +151,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 0:
                 ViewTarget target2 = new ViewTarget(R.id.vipassanaMode, this);
                 scv.setTarget(target2);
-                scv.setContentTitle("Vipassana Mode!");
-                scv.setContentText("Fixed 60 minute meditation by S. N. Goenka. Sadhu! Sadhu! Sadhu!");
+                scv.setContentTitle("Vipassanā Mode!");
+                scv.setContentText("Fixed 60 minutes meditation by S. N. Goenka. Sadhu! Sadhu! Sadhu!");
 
                 Handler handler = new Handler();
                 for (int i = 1; i<=days.size() ;i++) {
@@ -156,7 +160,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            days.get(finalI - 1).setChecked(false, true);
+                            SmoothCheckBox checkBox = days.get(finalI - 1);
+                            if (checkBox.isChecked()) {
+                                checkBox.setChecked(false, true);
+                            }
                         }
                     }, 100 * i);
                 }
@@ -188,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mediaPlayer.start();
                     selectedIndex = wheelView.getSelectedPosition();
                     timer = new myCountDownTimer((selectedIndex + 1) * 60000, 1000).start();
+                    setupNotification();
                 } else {
                     timer.cancel();
                     mediaPlayer.stop();
@@ -195,9 +203,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mediaPlayer = null;
                     setInputFieldEnabled(true);
                     wheelView.smoothSelectIndex(selectedIndex);
+                    removeNotification();
                 }
             }
         });
+    }
+
+    private void removeNotification() {
+        notificationManager.cancel(001);
+    }
+
+    private void setupNotification() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        1,
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.notification_icon)
+                        .setContentTitle("Meditation in progress")
+                        .setContentText("Time left: " + wheelView.getSelectedPosition() + 1)
+                        .setColor(getResources().getColor(R.color.float_color))
+                        .setOngoing(true)
+                        .setShowWhen(false)
+                        .setPriority(Notification.PRIORITY_HIGH)
+                        .setContentIntent(resultPendingIntent);
+        Notification notification = mBuilder.build();
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(001, notification);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        notificationManager.cancel(001);
     }
 
     private void setupWheel() {
@@ -207,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         wheelView.setItems(data);
         wheelView.selectIndex(getTime());
-        if(vipassanaMode.isChecked()) {
+        if (vipassanaMode.isChecked()) {
             wheelView.setEnabled(false);
         }
         wheelView.setOnWheelItemSelectedListener(new WheelView.OnWheelItemSelectedListener() {
@@ -232,19 +276,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.v("streak", ""+streak);
         Log.v("lastday", ""+getLastDay());
         Log.v("yesterday", ""+getYesterday());
-        Log.v("currentday", ""+getCurrentDay());
-        if(!getLastDay().equals(getYesterday()) && !getLastDay().equals(getCurrentDay()) && streak != 0) {
-            if(streak > 1) {
-                SweetAlertDialog pDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE);
-                pDialog.setTitleText("Oh no!");
-                pDialog.setContentText("Your " + streak + " day streak is over!");
-                pDialog.setConfirmText("Ok");
-                pDialog.setCancelable(false);
-                pDialog.show();
-            }
-            streak = 0;
-            saveData();
-        }
+        Log.v("currentday", "" + getCurrentDay());
+
         int streakRemain = streak % 7;
         int dayStart = streak - streakRemain;
 
@@ -263,6 +296,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             dayLayout.addView(checkBox);
             days.add(checkBox);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(!getLastDay().equals(getYesterday()) && !getLastDay().equals(getCurrentDay()) && streak != 0) {
+            if(streak > 1) {
+                SweetAlertDialog pDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE);
+                pDialog.setTitleText("Oh no!");
+                pDialog.setContentText("Your " + streak + " day streak is over!");
+                pDialog.setConfirmText("Ok");
+                pDialog.setCancelable(false);
+                pDialog.show();
+            }
+            streak = 0;
+            updateDays();
+            saveData();
         }
     }
 
@@ -295,6 +347,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private int getStreak() {
         SharedPreferences prefs = getSharedPreferences(MY_PREF, MODE_PRIVATE);
+//        return 6;
         return prefs.getInt(STREAK, 0);
     }
 
@@ -343,9 +396,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         bigText.startAnimation(set1);
-//
-//        Snackbar.make(coordinatorLayout, "Take a deep breath...", Snackbar.LENGTH_LONG)
-//                .show();
     }
 
     private String getCurrentDay() {
@@ -364,45 +414,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return dateFormat.format(cal.getTime());
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        mClient.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Main Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://ragone.io.quietmind/http/host/path")
+    private String getMinutesAndSeconds(long millis) {
+        return String.format("%02d:%02d",
+                TimeUnit.MILLISECONDS.toMinutes(millis),
+                TimeUnit.MILLISECONDS.toSeconds(millis) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
         );
-        AppIndex.AppIndexApi.start(mClient, viewAction);
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
+    private void updateDays() {
+        int streakRemain = streak % 7;
+        int dayStart = streak - streakRemain;
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Main Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://ragone.io.quietmind/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(mClient, viewAction);
-        mClient.disconnect();
+        for (int i = dayStart; i < dayStart + 7; i++) {
+            SmoothCheckBox checkBox = days.get(i%7);
+            checkBox.setText("" + (i + 1));
+        }
     }
+
 
     private class myCountDownTimer extends CountDownTimer {
         MediaPlayer vipassanaPlayer;
@@ -426,6 +455,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
                 vipassanaPlayer.start();
             }
+            mBuilder.setContentText("Time left: " + getMinutesAndSeconds(millisUntilFinished));
+            int timeInMillis = (selectedIndex + 1) * 60000;
+            mBuilder.setProgress(timeInMillis, timeInMillis - (int) millisUntilFinished, false);
+            Notification notification = mBuilder.build();
+            notificationManager.notify(001, notification);
         }
 
         @Override
@@ -455,16 +489,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             wheelView.smoothSelectIndex(selectedIndex);
             if(!getLastDay().equals(getCurrentDay()) && getLastDay().equals(getYesterday()) || streak == 0) {
                 streak++;
-                days.get(streak % 7 - 1).setChecked(true, true);
                 if(streak % 7 == 0) {
-                    SweetAlertDialog pDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.SUCCESS_TYPE);
+                    days.get(6).setChecked(true, true);
+                    final SweetAlertDialog pDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.SUCCESS_TYPE);
                     pDialog.setTitleText("You're on a " + streak + " day streak!");
                     pDialog.setConfirmText("I'm awesome");
                     pDialog.setCancelable(false);
+                    pDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                            pDialog.dismissWithAnimation();
+                            Handler handler = new Handler();
+                            for (int i = 1; i<=days.size() ;i++) {
+                                final int finalI = i;
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        days.get(finalI - 1).setChecked(false, true);
+                                    }
+                                }, 100 * i);
+                            }
+                        }
+                    });
                     pDialog.show();
+                    updateDays();
+                } else {
+                    days.get(streak % 7 - 1).setChecked(true, true);
                 }
             }
             lastDay = getCurrentDay();
+            removeNotification();
             saveData();
         }
     }
