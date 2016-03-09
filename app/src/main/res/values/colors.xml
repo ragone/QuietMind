@@ -7,4 +7,8 @@
     <color name="white">#ffffff</color>
     <color name="ruler">#80979797</color>
     <color name="dark_gray">#eeeeee</color>
+    <color name="guillotine_background">#444153</color>
+    <color name="guillotine_background_dark">#383547</color>
+    <color name="selected_item_color">#30d1d5</color>
+    <color name="transparent">#00252F38</color>
 </resources>

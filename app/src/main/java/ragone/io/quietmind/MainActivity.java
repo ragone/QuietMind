@@ -17,14 +17,19 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -43,6 +48,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import ragone.io.quietmind.animation.GuillotineAnimation;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -71,12 +77,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean firstTime;
     private NotificationCompat.Builder mBuilder;
     private NotificationManager notificationManager;
+    private LinearLayout mainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mainLayout = (LinearLayout) findViewById(R.id.main_layout);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         bigText = (TextView) findViewById(R.id.bigText);
         bigText.setVisibility(View.INVISIBLE);
@@ -106,10 +114,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setupPlayPauseButton();
         setupWheel();
 
+
         if (isFirstTime()) {
             showShowcase();
         }
+
+        ImageView btn = (ImageView) findViewById(R.id.content_hamburger);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, StatsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
+
 
     private boolean isFirstTime() {
         SharedPreferences prefs = getSharedPreferences(MY_PREF, MODE_PRIVATE);
