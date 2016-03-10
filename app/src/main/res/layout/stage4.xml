@@ -2,10 +2,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/layout1"
               android:orientation="vertical"
+              android:id="@+id/layout4"
               android:gravity="center_horizontal"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
@@ -16,7 +15,7 @@
         android:textColor="@color/float_color"
         android:fontFamily="sans-serif-condensed"
         android:textSize="20dp"
-        android:text="MILESTONE ONE"/>
+        android:text="MILESTONE FOUR"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,13 +24,13 @@
         android:gravity="center_horizontal"
         android:layout_marginBottom="20dp"
         android:textSize="20dp"
-        android:text="Establishing a Practice"/>
+        android:text="Continuous Attention and Overcoming Gross Distraction and Strong Dullness"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-condensed"
         android:textColor="@color/float_color"
+        android:fontFamily="sans-serif-condensed"
         android:textSize="15dp"
         android:text="GOAL"/>
 
@@ -43,7 +42,7 @@
 
         android:lineSpacingExtra="5dp"
         android:gravity="center_horizontal"
-        android:text="Develop a regular meditation practice."/>
+        android:text="Overcome gross distraction and strong dullness."/>
 
 
     <TextView
@@ -60,9 +59,7 @@
         android:textColor="@color/white"
         android:gravity="center_horizontal"
         android:lineSpacingExtra="5dp"
-        android:text="Never missing a daily practice session."/>
-
-
+        android:text="Gross distractions no longer push the breath into the background, and breath sensations don’t fade or become distorted due to strong dullness."/>
 
 
 </LinearLayout>

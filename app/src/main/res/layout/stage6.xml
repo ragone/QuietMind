@@ -2,11 +2,10 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/layout1"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:gravity="center_horizontal"
+                  android:id="@+id/layout6"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
@@ -16,7 +15,7 @@
         android:textColor="@color/float_color"
         android:fontFamily="sans-serif-condensed"
         android:textSize="20dp"
-        android:text="MILESTONE ONE"/>
+        android:text="MILESTONE SIX"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,7 +24,7 @@
         android:gravity="center_horizontal"
         android:layout_marginBottom="20dp"
         android:textSize="20dp"
-        android:text="Establishing a Practice"/>
+        android:text="Subduing Subtle Distraction"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -43,7 +42,7 @@
 
         android:lineSpacingExtra="5dp"
         android:gravity="center_horizontal"
-        android:text="Develop a regular meditation practice."/>
+        android:text="To subdue subtle distractions and develop metacognitive introspective awareness."/>
 
 
     <TextView
@@ -60,9 +59,7 @@
         android:textColor="@color/white"
         android:gravity="center_horizontal"
         android:lineSpacingExtra="5dp"
-        android:text="Never missing a daily practice session."/>
-
-
+        android:text="Subtle distractions have almost entirely disappeared, and you have unwavering exclusive attention together with vivid mindfulness."/>
 
 
 </LinearLayout>

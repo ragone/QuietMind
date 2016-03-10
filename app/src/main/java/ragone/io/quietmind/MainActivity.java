@@ -55,6 +55,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String MY_PREF = "my_prefs";
     private static final String VIPASSANA = "vipassana";
     private static final String FIRST_TIME = "first_time";
+    private static final String SESSION_NUM = "session_num";
+    private final String LONGEST_STREAK = "longeststreak";
+    private final String TOTAL_TIME = "totaltime";
+    private final String AVERAGE_TIME = "averagetime";
     private final String STREAK = "streak";
     private final String TIME = "time";
     private final String LAST_DAY = "lastday";
@@ -78,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private NotificationCompat.Builder mBuilder;
     private NotificationManager notificationManager;
     private LinearLayout mainLayout;
+    private ImageView menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainLayout = (LinearLayout) findViewById(R.id.main_layout);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         bigText = (TextView) findViewById(R.id.bigText);
+        menu = (ImageView) findViewById(R.id.content_hamburger);
         bigText.setVisibility(View.INVISIBLE);
         vipassanaMode = (SwitchCompat) findViewById(R.id.vipassanaMode);
         if(getVipassanaSelected()) {
@@ -229,7 +235,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void removeNotification() {
-        notificationManager.cancel(001);
+        if(notificationManager != null) {
+            notificationManager.cancelAll();
+        }
     }
 
     private void setupNotification() {
@@ -260,7 +268,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        notificationManager.cancel(001);
+        removeNotification();
+        if(timer != null) {
+            timer.cancel();
+        }
+        saveData();
     }
 
     private void setupWheel() {
@@ -294,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         streak = getStreak();
         Log.v("streak", ""+streak);
         Log.v("lastday", ""+getLastDay());
-        Log.v("yesterday", ""+getYesterday());
+        Log.v("yesterday", "" + getYesterday());
         Log.v("currentday", "" + getCurrentDay());
 
         int streakRemain = streak % 7;
@@ -321,6 +333,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
+        Log.v("Last day ", getLastDay());
+        Log.v("Yester day ", getYesterday());
+        Log.v("current day ", getCurrentDay());
 
         if(!getLastDay().equals(getYesterday()) && !getLastDay().equals(getCurrentDay()) && streak != 0) {
             if(streak > 1) {
@@ -332,6 +347,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 pDialog.show();
             }
             streak = 0;
+            Log.v("Streak ", "Streak reset to 0");
             updateDays();
             saveData();
         }
@@ -342,15 +358,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             wheelView.setEnabled(isEnabled);
         }
         vipassanaMode.setEnabled(isEnabled);
+        menu.setEnabled(isEnabled);
     }
 
     private void saveData() {
+        Log.v("Streak: ", "" + streak);
         SharedPreferences.Editor editor = getSharedPreferences(MY_PREF, MODE_PRIVATE).edit();
         editor.putInt(TIME, wheelView.getSelectedPosition());
-        editor.putInt(STREAK, streak);
-        editor.putString(LAST_DAY, lastDay);
         editor.putBoolean(VIPASSANA, vipassanaMode.isChecked());
         editor.putBoolean(FIRST_TIME, firstTime);
+        editor.commit();
+    }
+
+    private void saveProgress() {
+        Log.v("Streak: ", "" + streak);
+        SharedPreferences.Editor editor = getSharedPreferences(MY_PREF, MODE_PRIVATE).edit();
+        SharedPreferences prefs = getSharedPreferences(MY_PREF, MODE_PRIVATE);
+        editor.putInt(STREAK, streak);
+        editor.putString(LAST_DAY, lastDay);
+        int longestStreak = prefs.getInt(LONGEST_STREAK, 0);
+        int totalTime = prefs.getInt(TOTAL_TIME, 0);
+        int sessionNum = prefs.getInt(SESSION_NUM, 1);
+
+        if(streak > longestStreak) {
+            editor.putInt(LONGEST_STREAK, streak);
+        }
+        editor.putInt(TOTAL_TIME, totalTime + selectedIndex + 1);
+        editor.putInt(AVERAGE_TIME, (totalTime + selectedIndex + 1) / sessionNum);
+        editor.putInt(SESSION_NUM, sessionNum + 1);
         editor.commit();
     }
 
@@ -373,6 +408,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String getLastDay() {
         SharedPreferences prefs = getSharedPreferences(MY_PREF, MODE_PRIVATE);
 //        return "11/11/2016";
+        Log.v("LAST DAY", prefs.getString(LAST_DAY, "nothing"));
+        Log.v("STREAK", prefs.getInt(STREAK, 0) + "");
         return prefs.getString(LAST_DAY, "");
     }
 
@@ -451,6 +488,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        removeNotification();
+        if(timer != null) {
+            timer.cancel();
+        }
+        saveData();
+    }
+
 
     private class myCountDownTimer extends CountDownTimer {
         MediaPlayer vipassanaPlayer;
@@ -519,7 +566,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         public void onClick(SweetAlertDialog sweetAlertDialog) {
                             pDialog.dismissWithAnimation();
                             Handler handler = new Handler();
-                            for (int i = 1; i<=days.size() ;i++) {
+                            for (int i = 1; i <= days.size(); i++) {
                                 final int finalI = i;
                                 handler.postDelayed(new Runnable() {
                                     @Override
@@ -539,6 +586,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             lastDay = getCurrentDay();
             removeNotification();
             saveData();
+            saveProgress();
         }
     }
 }

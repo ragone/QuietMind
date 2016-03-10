@@ -10,6 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@color/colorPrimaryDark"
+    android:keepScreenOn="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="ragone.io.quietmind.StatsActivity"
     tools:showIn="@layout/activity_stats"
@@ -32,13 +33,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
                 android:layout_gravity="center"
                 android:textColor="@color/float_color"
                 android:text="CURRENT STREAK"/>
 
-            <TextView
+            <TextView android:id="@+id/currentstreak"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                      android:fontFamily="sans-serif-light"
                 android:textSize="20dp"
                 android:layout_gravity="center"
                 android:textColor="@color/white"
@@ -60,12 +63,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textColor="@color/float_color"
+                android:fontFamily="sans-serif-condensed"
                 android:text="LONGEST STREAK"/>
 
-            <TextView
+            <TextView android:id="@+id/longeststreak"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                      android:fontFamily="sans-serif-light"
                 android:textSize="20dp"
                 android:textColor="@color/white"
                 android:text="12 days"/>
@@ -85,13 +90,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:fontFamily="sans-serif-condensed"
                 android:textColor="@color/float_color"
                 android:text="TOTAL TIME"/>
 
-            <TextView
+            <TextView android:id="@+id/totaltime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                      android:fontFamily="sans-serif-light"
                 android:textSize="20dp"
                 android:textColor="@color/white"
                 android:text="7.5 hours"/>
@@ -111,13 +118,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:fontFamily="sans-serif-condensed"
                 android:textColor="@color/float_color"
                 android:text="AVERAGE TIME"/>
 
-            <TextView
+            <TextView android:id="@+id/averagetime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                      android:fontFamily="sans-serif-light"
                 android:textSize="20dp"
                 android:textColor="@color/white"
                 android:text="15 min"/>
@@ -139,28 +148,6 @@
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                  android:layout_width="match_parent"
                  android:layout_height="match_parent"
-                android:id="@+id/fragment_container"/>
-
-    <!--<me.relex.circleindicator.CircleIndicator-->
-        <!--android:id="@+id/indicator"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="48dp"/>-->
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="MILESTONE ONE"
-        android:textColor="@color/float_color"
-        android:textSize="25dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Interrupted Attention
-and Overcoming Mind-Wandering"
-        android:textColor="@color/white"
-        android:textSize="20dp"/>
+                 android:id="@+id/fragment_container"/>
 
 </LinearLayout>

@@ -2,21 +2,20 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/layout1"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:gravity="center_horizontal"
               android:layout_width="match_parent"
+                  android:id="@+id/layout9"
               android:layout_height="match_parent">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/float_color"
-        android:fontFamily="sans-serif-condensed"
         android:textSize="20dp"
-        android:text="MILESTONE ONE"/>
+        android:fontFamily="sans-serif-condensed"
+        android:text="MILESTONE NINE"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,13 +24,13 @@
         android:gravity="center_horizontal"
         android:layout_marginBottom="20dp"
         android:textSize="20dp"
-        android:text="Establishing a Practice"/>
+        android:text="Mental and Physical Pliancy and Calming the Intensity of Meditative Joy"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-condensed"
         android:textColor="@color/float_color"
+        android:fontFamily="sans-serif-condensed"
         android:textSize="15dp"
         android:text="GOAL"/>
 
@@ -43,7 +42,7 @@
 
         android:lineSpacingExtra="5dp"
         android:gravity="center_horizontal"
-        android:text="Develop a regular meditation practice."/>
+        android:text="The maturation of meditative joy, producing tranquility and equanimity."/>
 
 
     <TextView
@@ -60,9 +59,7 @@
         android:textColor="@color/white"
         android:gravity="center_horizontal"
         android:lineSpacingExtra="5dp"
-        android:text="Never missing a daily practice session."/>
-
-
+        android:text="Consistently evoking mental and physical pliancy, accompanied by profound tranquility and equanimity."/>
 
 
 </LinearLayout>

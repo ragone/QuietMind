@@ -1,13 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
+              android:gravity="center_horizontal"
+              android:id="@+id/layout2"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/float_color"
-        android:text="Hello World"/>
+        android:textColor="@color/float_color"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="20dp"
+        android:text="MILESTONE TWO"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:textSize="20dp"
+        android:text="Interrupted Attention and Overcoming Mind-Wandering"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/float_color"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="15dp"
+        android:text="GOAL"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:layout_marginBottom="20dp"
+
+        android:lineSpacingExtra="5dp"
+        android:gravity="center_horizontal"
+        android:text="Shorten the periods of mind-wandering and extend the periods of sustained attention to the meditation object."/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="15dp"
+        android:textColor="@color/float_color"
+        android:text="MASTERY"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="5dp"
+        android:text="You can sustain attention on the meditation object for minutes, while most periods of mind-wandering last only a few seconds."/>
+
 
 </LinearLayout>
+</ScrollView>

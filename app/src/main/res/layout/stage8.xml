@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/layout1"
+<LinearLayout
               android:orientation="vertical"
               android:gravity="center_horizontal"
+              android:id="@+id/layout8"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/float_color"
         android:fontFamily="sans-serif-condensed"
+        android:textColor="@color/float_color"
         android:textSize="20dp"
-        android:text="MILESTONE ONE"/>
+        android:text="MILESTONE EIGHT"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,13 +25,13 @@
         android:gravity="center_horizontal"
         android:layout_marginBottom="20dp"
         android:textSize="20dp"
-        android:text="Establishing a Practice"/>
+        android:text="Mental Pliancy and Pacifying the Senses"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-condensed"
         android:textColor="@color/float_color"
+        android:fontFamily="sans-serif-condensed"
         android:textSize="15dp"
         android:text="GOAL"/>
 
@@ -43,7 +43,7 @@
 
         android:lineSpacingExtra="5dp"
         android:gravity="center_horizontal"
-        android:text="Develop a regular meditation practice."/>
+        android:text="Complete pacification of the senses and the full arising of meditative joy."/>
 
 
     <TextView
@@ -60,9 +60,7 @@
         android:textColor="@color/white"
         android:gravity="center_horizontal"
         android:lineSpacingExtra="5dp"
-        android:text="Never missing a daily practice session."/>
-
-
+        android:text="When the eyes perceive only an inner light, the ears perceive only an inner sound, the body is suffused with a sense of pleasure and comfort, and your mental state is one of intense joy. With this mental and physical pliancy, you can sit for hours without dullness, distraction, or physical discomfort."/>
 
 
 </LinearLayout>

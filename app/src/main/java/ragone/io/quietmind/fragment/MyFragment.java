@@ -25,6 +25,6 @@ public class MyFragment extends Fragment {
         CircleIndicator indicator = (CircleIndicator) view.findViewById(R.id.indicator);
         viewpager.setAdapter(new MyPagerAdapter(view.getContext()));
         indicator.setViewPager(viewpager);
-        viewpager.setCurrentItem(2);
+        viewpager.setCurrentItem(0);
     }
 }
