@@ -62,10 +62,15 @@ public class MyDrawer extends MaterialShowcaseDrawer {
             right = x + CompatUtils.dp2px(context, 200);
             bottom = y + CompatUtils.dp2px(context, 20);
 
-        } else {
+        } else if(counter == 1) {
             left = x - CompatUtils.dp2px(context, 30);
             top = y - CompatUtils.dp2px(context, 20);
             right = x + CompatUtils.dp2px(context, 160);
+            bottom = y + CompatUtils.dp2px(context, 20);
+        } else {
+            left = x - CompatUtils.dp2px(context, 30);
+            top = y - CompatUtils.dp2px(context, 20);
+            right = x + CompatUtils.dp2px(context, 30);
             bottom = y + CompatUtils.dp2px(context, 20);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

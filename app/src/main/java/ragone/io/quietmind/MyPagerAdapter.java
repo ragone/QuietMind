@@ -66,7 +66,7 @@ public class MyPagerAdapter extends PagerAdapter {
 
 
         SmoothCheckBox checkBox = new SmoothCheckBox(view.getContext());
-        checkBox.setText("");
+        checkBox.setText("DONE");
         checkBox.setEnabled(true);
         int a = CompatUtils.dp2px(view.getContext(), 60);
         int b = CompatUtils.dp2px(view.getContext(), 20);
@@ -85,6 +85,7 @@ public class MyPagerAdapter extends PagerAdapter {
                     public void onCheckedChanged(SmoothCheckBox checkBox, boolean isChecked) {
                         editor.putBoolean(STAGE1, checkBox.isChecked());
                         editor.commit();
+
                     }
                 });
                 checkBox.setChecked(prefs.getBoolean(STAGE1, false), false);

@@ -45,8 +45,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                      android:focusable="true"
+                      android:clickable="true"
                 android:orientation="horizontal"
-                android:layout_marginBottom="20dp">
+                android:paddingBottom="20dp">
 
             <!-- Checkboxes -->
 

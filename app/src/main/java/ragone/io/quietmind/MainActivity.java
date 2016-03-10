@@ -5,10 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -17,27 +14,19 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
-import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.lantouzi.wheelview.WheelView;
 
 import java.text.SimpleDateFormat;
@@ -48,7 +37,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import ragone.io.quietmind.animation.GuillotineAnimation;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -82,7 +70,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private NotificationCompat.Builder mBuilder;
     private NotificationManager notificationManager;
     private LinearLayout mainLayout;
-    private ImageView menu;
+    private ImageView statsBtn;
+    private ImageView exitBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainLayout = (LinearLayout) findViewById(R.id.main_layout);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         bigText = (TextView) findViewById(R.id.bigText);
-        menu = (ImageView) findViewById(R.id.content_hamburger);
         bigText.setVisibility(View.INVISIBLE);
         vipassanaMode = (SwitchCompat) findViewById(R.id.vipassanaMode);
         if(getVipassanaSelected()) {
@@ -125,8 +113,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             showShowcase();
         }
 
-        ImageView btn = (ImageView) findViewById(R.id.content_hamburger);
-        btn.setOnClickListener(new View.OnClickListener() {
+        statsBtn = (ImageView) findViewById(R.id.stats_button);
+        statsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, StatsActivity.class);
@@ -143,18 +131,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void showShowcase() {
-        Handler handler = new Handler();
-        for (int i = 1; i <= days.size(); i++) {
-            final int finalI = i;
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if(counter == 0) {
-                        days.get(finalI - 1).setChecked(true, true);
-                    }
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                Handler handler = new Handler();
+                for (int i = 1; i <= days.size(); i++) {
+                    final int finalI = i;
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(counter == 0) {
+                                days.get(finalI - 1).setChecked(true, true);
+                            }
+                        }
+                    }, 1000 * i);
                 }
-            }, 1000 * i);
-        }
+                Looper.loop();
+            }
+        }).start();
 
         ViewTarget target = new ViewTarget(R.id.dayLayout, this);
         myDrawer = new MyDrawer(getResources(), MainActivity.this, days);
@@ -194,6 +191,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case 1:
+                ViewTarget target = new ViewTarget(R.id.stats_button, this);
+                scv.setTarget(target);
+                scv.setContentTitle("Ten stages of meditation");
+                scv.setContentText("Ten stages to help you figure out where you are and how best to continue.");
+                break;
+            case 2:
                 scv.hide();
                 firstTime = false;
                 saveData();
@@ -358,7 +361,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             wheelView.setEnabled(isEnabled);
         }
         vipassanaMode.setEnabled(isEnabled);
-        menu.setEnabled(isEnabled);
+        statsBtn.setEnabled(isEnabled);
     }
 
     private void saveData() {

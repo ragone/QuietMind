@@ -16,7 +16,7 @@
         android:fontFamily="sans-serif-condensed"
         android:textColor="@color/float_color"
         android:textSize="20dp"
-        android:text="MILESTONE EIGHT"/>
+        android:text="STAGE EIGHT"/>
 
     <TextView
         android:layout_width="wrap_content"
