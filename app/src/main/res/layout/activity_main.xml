@@ -11,14 +11,14 @@
 
     <include layout="@layout/content_main"/>
 
-    <ImageView android:id="@+id/stats_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView android:id="@+id/help_button"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
                android:paddingLeft="16dp"
                android:paddingTop="16dp"
                android:paddingBottom="16dp"
                android:paddingRight="16dp"
-               android:src="@drawable/ic_menu"
+               android:src="@drawable/help"
         />
 
     <ragone.io.quietmind.PlayPauseView

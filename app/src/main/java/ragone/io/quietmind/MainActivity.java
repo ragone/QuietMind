@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int ringer = 0;
     private AudioManager audio;
     private float brightness;
+    private ImageView helpBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,11 +98,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     wheelView.smoothSelectIndex(59);
-                    wheelView.setEnabled(false);
+//                    wheelView.setEnabled(false);
 
                 } else {
-                    wheelView.smoothSelectIndex(selectedIndex);
-                    wheelView.setEnabled(true);
+//                    wheelView.smoothSelectIndex(selectedIndex);
+//                    wheelView.setEnabled(true);
                 }
                 saveData();
             }
@@ -127,6 +128,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
             }
         });
+
+        helpBtn = (ImageView) findViewById(R.id.help_button);
+        helpBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showShowcase();
+            }
+        });
     }
 
 
@@ -149,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            if(counter == 0) {
+                            if(counter == 0 && isFirstTime()) {
                                 days.get(finalI - 1).setChecked(true, true);
                             }
                         }
@@ -189,17 +198,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void run() {
                             SmoothCheckBox checkBox = days.get(finalI - 1);
-                            if (checkBox.isChecked()) {
+                            if (checkBox.isChecked() && isFirstTime()) {
                                 checkBox.setChecked(false, true);
                             }
                         }
                     }, 100 * i);
                 }
+                updateDays();
                 break;
             case 1:
                 ViewTarget target = new ViewTarget(R.id.stats_button, this);
                 scv.setTarget(target);
-                scv.setContentTitle("Ten stages of meditation");
+                scv.setContentTitle("Ten Stages of Meditation");
                 scv.setContentText("Ten stages to help you figure out where you are and how best to continue.");
                 break;
             case 2:
@@ -209,6 +219,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
         counter++;
+        if(counter == 3) {
+            counter = 0;
+        }
     }
 
     private void setScreenDim(float value) {
@@ -312,9 +325,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         wheelView.setItems(data);
         wheelView.selectIndex(getTime());
-        if (vipassanaMode.isChecked()) {
-            wheelView.setEnabled(false);
-        }
+//        if (vipassanaMode.isChecked()) {
+//            wheelView.setEnabled(true);
+//        }
         wheelView.setOnWheelItemSelectedListener(new WheelView.OnWheelItemSelectedListener() {
             @Override
             public void onWheelItemChanged(WheelView wheelView, int position) {
@@ -324,6 +337,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onWheelItemSelected(WheelView wheelView, int position) {
                 selectedIndex = position;
+                if (vipassanaMode.isChecked()) {
+                    vipassanaMode.setChecked(false);
+                }
                 saveData();
             }
         });
@@ -384,11 +400,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setInputFieldEnabled(boolean isEnabled) {
-        if(!vipassanaMode.isChecked()) {
-            wheelView.setEnabled(isEnabled);
-        }
+        wheelView.setEnabled(isEnabled);
         vipassanaMode.setEnabled(isEnabled);
         statsBtn.setEnabled(isEnabled);
+        helpBtn.setEnabled(isEnabled);
     }
 
     private void saveData() {

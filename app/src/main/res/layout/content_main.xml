@@ -68,14 +68,32 @@
         android:layout_gravity="center_horizontal"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:textColor="@color/white"
-            android:text="@string/time"
-            android:layout_gravity="left"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:textColor="@color/white"
+                android:text="@string/time"
+                android:layout_gravity="left"/>
+
+            <ImageView android:id="@+id/stats_button"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_gravity="right"
+                       android:paddingLeft="16dp"
+                       android:paddingTop="18dp"
+                       android:paddingBottom="16dp"
+                       android:paddingRight="16dp"
+                       android:src="@drawable/ic_menu"
+                />
+
+        </FrameLayout>
 
         <com.lantouzi.wheelview.WheelView android:id="@+id/wheel"
             android:layout_width="wrap_content"

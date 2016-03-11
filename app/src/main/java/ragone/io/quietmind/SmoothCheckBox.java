@@ -285,7 +285,7 @@ public class SmoothCheckBox extends View implements Checkable {
             drawTickPath(canvas);
         } else {
             Paint p = new Paint();
-            p.setTextSize(50);
+            p.setTextSize(CompatUtils.dp2px(getContext(), 12));
             p.setTextAlign(Paint.Align.CENTER);
             p.setColor(Color.WHITE);
             Rect rect = new Rect();
