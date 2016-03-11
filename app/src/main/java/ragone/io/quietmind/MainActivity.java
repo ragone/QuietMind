@@ -3,8 +3,10 @@ package ragone.io.quietmind;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -16,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -72,6 +75,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout mainLayout;
     private ImageView statsBtn;
     private ImageView exitBtn;
+    private int ringer = 0;
+    private AudioManager audio;
+    private float brightness;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,6 +211,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         counter++;
     }
 
+    private void setScreenDim(float value) {
+        WindowManager.LayoutParams WMLP = getWindow().getAttributes();
+        WMLP.screenBrightness = value;
+        getWindow().setAttributes(WMLP);
+    }
+
+    private float getScreenDim() {
+        WindowManager.LayoutParams WMLP = getWindow().getAttributes();
+        return WMLP.screenBrightness;
+    }
+
 
     private void setupPlayPauseButton() {
         playPauseView.toggle();
@@ -212,7 +229,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 playPauseView.toggle();
+                audio = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
                 if (playPauseView.getDrawable().isPlay()) {
+                    brightness = getScreenDim();
+                    setScreenDim(0.1f);
+                    ringer = audio.getRingerMode();
+                    audio.setRingerMode(0);
                     setInputFieldEnabled(false);
                     showSnackBar();
                     if (vipassanaMode.isChecked()) {
@@ -225,6 +247,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     timer = new myCountDownTimer((selectedIndex + 1) * 60000, 1000).start();
                     setupNotification();
                 } else {
+                    setScreenDim(brightness);
+                    audio.setRingerMode(ringer);
                     timer.cancel();
                     mediaPlayer.stop();
                     mediaPlayer.release();
@@ -272,6 +296,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
         removeNotification();
+        if(mediaPlayer != null) {
+            mediaPlayer.stop();
+        }
         if(timer != null) {
             timer.cancel();
         }
@@ -494,19 +521,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStop() {
         super.onStop();
-        removeNotification();
-        if(timer != null) {
-            timer.cancel();
-        }
         saveData();
     }
 
-
+    private MediaPlayer vipassanaPlayer;
     private class myCountDownTimer extends CountDownTimer {
-        MediaPlayer vipassanaPlayer;
 
         public myCountDownTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
+            vipassanaPlayer = null;
         }
 
         @Override
@@ -554,6 +577,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mediaPlayer.start();
             }
             playPauseView.toggle();
+            setScreenDim(brightness);
+            audio.setRingerMode(ringer);
             setInputFieldEnabled(true);
             wheelView.smoothSelectIndex(selectedIndex);
             if(!getLastDay().equals(getCurrentDay()) && getLastDay().equals(getYesterday()) || streak == 0) {

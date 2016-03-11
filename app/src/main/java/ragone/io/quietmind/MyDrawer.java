@@ -58,10 +58,9 @@ public class MyDrawer extends MaterialShowcaseDrawer {
         if(counter == 0) {
             left = x - CompatUtils.dp2px(context, 200);
             Log.v("Location", left + "");
-            top = y - CompatUtils.dp2px(context, 200);
+            top = y - CompatUtils.dp2px(context, 30);
             right = x + CompatUtils.dp2px(context, 200);
             bottom = y + CompatUtils.dp2px(context, 20);
-
         } else if(counter == 1) {
             left = x - CompatUtils.dp2px(context, 30);
             top = y - CompatUtils.dp2px(context, 20);

@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import ragone.io.quietmind.fragment.MyFragment;
@@ -18,6 +21,7 @@ public class StatsActivity extends AppCompatActivity {
     private final String LONGEST_STREAK = "longeststreak";
     private final String TOTAL_TIME = "totaltime";
     private final String AVERAGE_TIME = "averagetime";
+    private static final String LAST_VIEWED_STAGE = "last_viewed_stage";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +32,23 @@ public class StatsActivity extends AppCompatActivity {
         TextView longestStreak = (TextView) findViewById(R.id.longeststreak);
         TextView totalTime = (TextView) findViewById(R.id.totaltime);
         TextView averageTime = (TextView) findViewById(R.id.averagetime);
+//        ImageView imageView = (ImageView) findViewById(R.id.close_button);
 
         currentStreak.setText(getCurrentStreak());
         longestStreak.setText(getLongestStreak());
         totalTime.setText(getTotalTime());
         averageTime.setText(getAverageTime());
+//        currentStreak.setText("2 days");
+//        longestStreak.setText("7 days");
+//        totalTime.setText("45.2 hours");
+//        averageTime.setText("15.9 min.");
+//        imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
+
 
         Fragment demoFragment = Fragment.instantiate(this, MyFragment.class.getName());
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
