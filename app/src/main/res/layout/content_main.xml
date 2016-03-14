@@ -104,36 +104,47 @@
             app:lwvIntervalFactor="3"
             app:lwvMarkRatio="0.5"/>
 
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-            <LinearLayout
+        <Button android:id="@+id/options"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_gravity="left">
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                style="?android:attr/borderlessButtonStyle"
+                android:textColor="@color/white"
+                android:text="Options"/>
 
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/vipassanaMode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:thumb="@drawable/thumb_bg"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Vipassanā Mode"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:textColor="@color/white"/>
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:rowCount="1"
+            android:columnCount="2">
 
-            </LinearLayout>
 
-            <Button android:id="@+id/interval"
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="15dp"-->
+                <!--android:layout_gravity="left">-->
+
+                <!--<android.support.v7.widget.SwitchCompat-->
+                    <!--android:id="@+id/vipassanaMode"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:thumb="@drawable/thumb_bg"-->
+                    <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+                    <!--/>-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Vipassanā Mode"-->
+                    <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+                    <!--android:textColor="@color/white"/>-->
+
+            <!--</LinearLayout>-->
+
+            <Button android:id="@+id/vipassanaBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
@@ -141,8 +152,27 @@
                     android:layout_marginRight="@dimen/activity_horizontal_margin"
                     style="?android:attr/borderlessButtonStyle"
                     android:textColor="@color/white"
+                    android:text="Vipassanā Mode"/>
+
+            <Button android:id="@+id/interval"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:textColor="@color/white"
                     android:text="Set Interval"/>
-        </FrameLayout>
+        </GridLayout>
+
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/vipassanaMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:thumb="@drawable/thumb_bg"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            />
+
 
 
         <TextView android:id="@+id/bigText"

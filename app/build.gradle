@@ -30,4 +30,5 @@ dependencies {
     compile 'cn.pedant.sweetalert:library:1.3'
     compile 'com.github.amlcurran.showcaseview:library:5.4.1'
     compile 'me.relex:circleindicator:1.1.8@aar'
+    compile 'com.specyci:residemenu:1.6+'
 }

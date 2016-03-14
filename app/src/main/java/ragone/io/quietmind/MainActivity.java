@@ -35,11 +35,14 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.ToggleButton;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.lantouzi.wheelview.WheelView;
+import com.special.ResideMenu.ResideMenu;
+import com.special.ResideMenu.ResideMenuItem;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -91,6 +94,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView helpBtn;
     private boolean intervalOn = false;
     private Button intervalBtn;
+    private Button vipassanaBtn;
+    private ToggleButton vipassanaToggle;
+    private ResideMenu resideMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,14 +114,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         vipassanaMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    wheelView.smoothSelectIndex(59);
-//                    wheelView.setEnabled(false);
-
-                } else {
-//                    wheelView.smoothSelectIndex(selectedIndex);
-//                    wheelView.setEnabled(true);
-                }
+                wheelView.smoothSelectIndex(59);
                 saveData();
             }
         });
@@ -126,6 +125,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setupPlayPauseButton();
         setupWheel();
+
+        resideMenu = new ResideMenu(this);
+        resideMenu.setBackgroundColor(Color.parseColor("#252F38"));
+        resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_RIGHT);
+        resideMenu.attachToActivity(this);
+
+        // create menu items;
+        String titles[] = { "Home", "Profile", "Calendar", "Settings" };
+        int icon[] = { R.drawable.help, R.drawable.help, R.drawable.help, R.drawable.help };
+
+        for (int i = 0; i < titles.length; i++){
+            ResideMenuItem item = new ResideMenuItem(this, icon[i], titles[i]);
+//            item.setOnClickListener(this);
+            resideMenu.addMenuItem(item,  ResideMenu.DIRECTION_LEFT); // or  ResideMenu.DIRECTION_RIGHT
+        }
 
 
         if (isFirstTime()) {
@@ -145,7 +159,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         helpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showShowcase();
+                resideMenu.openMenu(ResideMenu.DIRECTION_LEFT); // or ResideMenu.DIRECTION_RIGHT
+//                showShowcase();
             }
         });
 
@@ -193,6 +208,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .show();
             }
         });
+        setupVipassanaButton();
+    }
+
+    private void setupVipassanaButton() {
+//        vipassanaBtn = (Button) findViewById(R.id.vipassanaBtn);
+//        vipassanaBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+//                vipassanaToggle = new ToggleButton(MainActivity.this);
+//                vipassanaToggle.setChecked(getVipassanaSelected());
+//                vipassanaToggle.setTextOn("On");
+//                vipassanaToggle.setTextOff("Off");
+//                builder.setTitle("Vipassanā Mode")
+//                        .setView(vipassanaToggle)
+//                        .setPositiveButton("Set", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                SharedPreferences.Editor editor = getSharedPreferences(MY_PREF, MODE_PRIVATE).edit();
+//                                editor.putBoolean(VIPASSANA, vipassanaToggle.isChecked());
+//                                editor.commit();
+//                                dialog.dismiss();
+//                            }
+//                        })
+//                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                dialog.dismiss();
+//                            }
+//                        })
+//
+//                        .show();
+//            }
+//        });
     }
 
     private int getInterval() {
