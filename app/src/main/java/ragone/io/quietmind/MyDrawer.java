@@ -55,9 +55,9 @@ public class MyDrawer extends MaterialShowcaseDrawer {
     public void showcaseChanger(Canvas bufferCanvas, float x, float y) {
         Log.v("Location", loc1x + "");
         Log.v("Location", loc2x + "");
+
         if(counter == 0) {
             left = x - CompatUtils.dp2px(context, 200);
-            Log.v("Location", left + "");
             top = y - CompatUtils.dp2px(context, 30);
             right = x + CompatUtils.dp2px(context, 200);
             bottom = y + CompatUtils.dp2px(context, 20);
@@ -66,12 +66,19 @@ public class MyDrawer extends MaterialShowcaseDrawer {
             top = y - CompatUtils.dp2px(context, 20);
             right = x + CompatUtils.dp2px(context, 160);
             bottom = y + CompatUtils.dp2px(context, 20);
-        } else {
+        } else if (counter == 2) {
             left = x - CompatUtils.dp2px(context, 30);
             top = y - CompatUtils.dp2px(context, 20);
             right = x + CompatUtils.dp2px(context, 30);
+            bottom = y + CompatUtils.dp2px(context, 25);
+        } else {
+            left = x - CompatUtils.dp2px(context, 60);
+            top = y - CompatUtils.dp2px(context, 20);
+            right = x + CompatUtils.dp2px(context, 60);
             bottom = y + CompatUtils.dp2px(context, 20);
         }
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             bufferCanvas.drawRoundRect(left, top, right, bottom, 200, 200, eraserPaint);
         } else {

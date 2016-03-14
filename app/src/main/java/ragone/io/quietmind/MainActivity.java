@@ -4,8 +4,10 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -14,21 +16,28 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.lantouzi.wheelview.WheelView;
 
@@ -43,6 +52,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String INTERVAL_PREF = "interval";
     private static final String MY_PREF = "my_prefs";
     private static final String VIPASSANA = "vipassana";
     private static final String FIRST_TIME = "first_time";
@@ -79,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private AudioManager audio;
     private float brightness;
     private ImageView helpBtn;
+    private boolean intervalOn = false;
+    private Button intervalBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +148,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 showShowcase();
             }
         });
+
+        intervalBtn = (Button) findViewById(R.id.interval);
+        intervalBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final NumberPicker picker = new NumberPicker(MainActivity.this);
+                String[] list = new String[21];
+                for(int i = 0; i <= 20; i++) {
+                    if(i == 0) {
+                        list[i] = "Disabled";
+                    } else {
+                        list[i] = i + " min.";
+                    }
+                }
+                picker.setMaxValue(20);
+                picker.setMinValue(0);
+
+                picker.setDisplayedValues(list);
+                int interval = getInterval();
+                picker.setValue(interval);
+
+                picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Set Interval of Bells")
+                        .setView(picker)
+                        .setPositiveButton("Set", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SharedPreferences.Editor editor = getSharedPreferences(MY_PREF, MODE_PRIVATE).edit();
+                                editor.putInt(INTERVAL_PREF, picker.getValue());
+                                editor.commit();
+                                dialog.dismiss();
+                            }
+                        })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+
+                .show();
+            }
+        });
+    }
+
+    private int getInterval() {
+        SharedPreferences prefs = getSharedPreferences(MY_PREF, MODE_PRIVATE);
+        return prefs.getInt(INTERVAL_PREF, 0);
     }
 
 
@@ -209,17 +271,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 1:
                 ViewTarget target = new ViewTarget(R.id.stats_button, this);
                 scv.setTarget(target);
-                scv.setContentTitle("Ten Stages of Meditation");
+                scv.setContentTitle("Stages of Meditation!");
                 scv.setContentText("Ten stages to help you figure out where you are and how best to continue.");
                 break;
             case 2:
+                ViewTarget target4 = new ViewTarget(R.id.interval, this);
+                scv.setTarget(target4);
+                scv.setContentTitle("Set an Interval!");
+                scv.setContentText("Be reminded to focus on your breathing by playing bells during your session.");
+                break;
+            case 3:
+                scv.setTarget(Target.NONE);
+                scv.setContentTitle("How to Meditate?");
+                scv.setStyle(R.style.MyTheme2);
+                scv.setShouldCentreText(true);
+                scv.setContentText("1. Set the timer.\n2. Press play.\n3. Take a deep breath.\n4. Relax.\n5. Focus on your breathing.");
+                break;
+            case 4:
                 scv.hide();
                 firstTime = false;
                 saveData();
                 break;
         }
         counter++;
-        if(counter == 3) {
+        if(counter == 5) {
             counter = 0;
         }
     }
@@ -245,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 audio = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
                 if (playPauseView.getDrawable().isPlay()) {
                     brightness = getScreenDim();
-                    setScreenDim(0.1f);
+                    setScreenDim(0.2f);
                     ringer = audio.getRingerMode();
                     audio.setRingerMode(0);
                     setInputFieldEnabled(false);
@@ -400,6 +475,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setInputFieldEnabled(boolean isEnabled) {
+        intervalBtn.setEnabled(isEnabled);
         wheelView.setEnabled(isEnabled);
         vipassanaMode.setEnabled(isEnabled);
         statsBtn.setEnabled(isEnabled);
@@ -562,6 +638,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
                 vipassanaPlayer.start();
             }
+
+
+            int interval = getInterval() * 60000;
+            if(interval != 0 && millisUntilFinished > interval && millisUntilFinished % interval < 1000) {
+                mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.bell1);
+                mediaPlayer.start();
+                Log.v("BELL", "INTERVAL BELL PLAYED at " + interval);
+            }
+
             mBuilder.setContentText("Time left: " + getMinutesAndSeconds(millisUntilFinished));
             int timeInMillis = (selectedIndex + 1) * 60000;
             mBuilder.setProgress(timeInMillis, timeInMillis - (int) millisUntilFinished, false);

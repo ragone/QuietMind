@@ -87,7 +87,7 @@
                        android:layout_height="wrap_content"
                        android:layout_gravity="right"
                        android:paddingLeft="16dp"
-                       android:paddingTop="18dp"
+                       android:paddingTop="21dp"
                        android:paddingBottom="16dp"
                        android:paddingRight="16dp"
                        android:src="@drawable/ic_menu"
@@ -100,31 +100,50 @@
             android:background="@color/white"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="15dp"
             app:lwvHighlightColor="@color/float_color"
             app:lwvIntervalFactor="3"
             app:lwvMarkRatio="0.5"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/vipassanaMode"
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:thumb="@drawable/thumb_bg"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                />
+                android:layout_marginTop="15dp"
+                android:layout_gravity="left">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Vipassanā Mode"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:textColor="@color/white"/>
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/vipassanaMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:thumb="@drawable/thumb_bg"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    />
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vipassanā Mode"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
+
+            <Button android:id="@+id/interval"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:textColor="@color/white"
+                    android:text="Set Interval"/>
+        </FrameLayout>
+
 
         <TextView android:id="@+id/bigText"
             android:layout_width="wrap_content"

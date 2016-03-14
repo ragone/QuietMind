@@ -26,6 +26,7 @@ import ragone.io.quietmind.fragment.MyFragment;
 public class MyPagerAdapter extends PagerAdapter {
 
     private static final String MY_PREF = "my_prefs";
+    private static final String INTRO = "intro";
     private static final String STAGE1 = "stage1";
     private static final String STAGE2 = "stage2";
     private static final String STAGE3 = "stage3";
@@ -47,7 +48,7 @@ public class MyPagerAdapter extends PagerAdapter {
     }
 
     @Override public int getCount() {
-        return 10;
+        return 15;
     }
 
     @Override public boolean isViewFromObject(View view, Object object) {
@@ -79,6 +80,9 @@ public class MyPagerAdapter extends PagerAdapter {
 
         switch (position) {
             case 0:
+                theInflatedView = (ScrollView) inflater.inflate(R.layout.intro, null);
+                break;
+            case 1:
                 theInflatedView = (ScrollView) inflater.inflate(R.layout.stage1, null);
                 checkBox.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
                     @Override
@@ -91,7 +95,7 @@ public class MyPagerAdapter extends PagerAdapter {
                 checkBox.setChecked(prefs.getBoolean(STAGE1, false), false);
                 linearLayout = (LinearLayout) theInflatedView.findViewById(R.id.layout1);
                 break;
-            case 1:
+            case 2:
                 theInflatedView = (ScrollView)inflater.inflate(R.layout.stage2, null);
                 checkBox.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
                     @Override
@@ -103,7 +107,7 @@ public class MyPagerAdapter extends PagerAdapter {
                 checkBox.setChecked(prefs.getBoolean(STAGE2, false), false);
                 linearLayout = (LinearLayout) theInflatedView.findViewById(R.id.layout2);
                 break;
-            case 2:
+            case 3:
                 theInflatedView = (ScrollView)inflater.inflate(R.layout.stage3, null);
                 checkBox.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
                     @Override
@@ -115,7 +119,10 @@ public class MyPagerAdapter extends PagerAdapter {
                 checkBox.setChecked(prefs.getBoolean(STAGE3, false), false);
                 linearLayout = (LinearLayout) theInflatedView.findViewById(R.id.layout3);
                 break;
-            case 3:
+            case 4:
+                theInflatedView = (ScrollView)inflater.inflate(R.layout.milestone1, null);
+                break;
+            case 5:
                 theInflatedView = (ScrollView)inflater.inflate(R.layout.stage4, null);
                 checkBox.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
                     @Override
@@ -127,7 +134,7 @@ public class MyPagerAdapter extends PagerAdapter {
                 checkBox.setChecked(prefs.getBoolean(STAGE4, false), false);
                 linearLayout = (LinearLayout) theInflatedView.findViewById(R.id.layout4);
                 break;
-            case 4:
+            case 6:
                 theInflatedView = (ScrollView)inflater.inflate(R.layout.stage5, null);
                 checkBox.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
                     @Override
@@ -139,7 +146,7 @@ public class MyPagerAdapter extends PagerAdapter {
                 checkBox.setChecked(prefs.getBoolean(STAGE5, false), false);
                 linearLayout = (LinearLayout) theInflatedView.findViewById(R.id.layout5);
                 break;
-            case 5:
+            case 7:
                 theInflatedView = (ScrollView)inflater.inflate(R.layout.stage6, null);
                 checkBox.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
                     @Override
@@ -151,7 +158,10 @@ public class MyPagerAdapter extends PagerAdapter {
                 checkBox.setChecked(prefs.getBoolean(STAGE6, false), false);
                 linearLayout = (LinearLayout) theInflatedView.findViewById(R.id.layout6);
                 break;
-            case 6:
+            case 8:
+                theInflatedView = (ScrollView)inflater.inflate(R.layout.milestone2, null);
+                break;
+            case 9:
                 theInflatedView = (ScrollView)inflater.inflate(R.layout.stage7, null);
                 checkBox.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
                     @Override
@@ -163,7 +173,10 @@ public class MyPagerAdapter extends PagerAdapter {
                 checkBox.setChecked(prefs.getBoolean(STAGE7, false), false);
                 linearLayout = (LinearLayout) theInflatedView.findViewById(R.id.layout7);
                 break;
-            case 7:
+            case 10:
+                theInflatedView = (ScrollView)inflater.inflate(R.layout.milestone3, null);
+                break;
+            case 11:
                 theInflatedView =(ScrollView) inflater.inflate(R.layout.stage8, null);
                 checkBox.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
                     @Override
@@ -175,7 +188,7 @@ public class MyPagerAdapter extends PagerAdapter {
                 checkBox.setChecked(prefs.getBoolean(STAGE8, false), false);
                 linearLayout = (LinearLayout) theInflatedView.findViewById(R.id.layout8);
                 break;
-            case 8:
+            case 12:
                 theInflatedView = (ScrollView)inflater.inflate(R.layout.stage9, null);
                 checkBox.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
                     @Override
@@ -187,7 +200,7 @@ public class MyPagerAdapter extends PagerAdapter {
                 checkBox.setChecked(prefs.getBoolean(STAGE9, false), false);
                 linearLayout = (LinearLayout) theInflatedView.findViewById(R.id.layout9);
                 break;
-            case 9:
+            case 13:
                 theInflatedView = (ScrollView)inflater.inflate(R.layout.stage10, null);
                 checkBox.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
                     @Override
@@ -198,6 +211,9 @@ public class MyPagerAdapter extends PagerAdapter {
                 });
                 checkBox.setChecked(prefs.getBoolean(STAGE10, false), false);
                 linearLayout = (LinearLayout) theInflatedView.findViewById(R.id.layout10);
+                break;
+            case 14:
+                theInflatedView = (ScrollView)inflater.inflate(R.layout.milestone4, null);
                 break;
         }
         editor.commit();

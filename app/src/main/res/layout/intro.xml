@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/layout1"
+              android:orientation="vertical"
+              android:gravity="center_horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/float_color"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="20dp"
+        android:layout_marginBottom="5dp"
+        android:text="TEN STAGES OF MEDITATION"/>
+
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:layout_marginBottom="20dp"-->
+        <!--android:textSize="20dp"-->
+        <!--android:text="A map to help you figure out where you are and how best to continue."/>-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:layout_marginBottom="10dp"
+        android:lineSpacingExtra="5dp"
+        android:gravity="center_horizontal"
+        android:text="The path to becoming an adept meditator is defined in terms of certain skills that you have to master."/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:layout_marginBottom="20dp"
+        android:lineSpacingExtra="5dp"
+        android:gravity="center_horizontal"
+        android:text="Only when you have mastered the skills of a particular stage of meditation will you be able to master the next stage."/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/swipe"/>
+
+
+
+</LinearLayout>
+</ScrollView>

@@ -24,12 +24,31 @@
     <style name="MyTheme" parent="ShowcaseView">
         <item name="sv_backgroundColor">#D9252F38</item>
         <item name="sv_showcaseColor">#28A69A</item>
-        <item name="sv_buttonText">Got it!</item>
+        <item name="sv_buttonText">Got it</item>
         <item name="sv_titleTextAppearance">@style/CustomTitle</item>
+        <item name="sv_detailTextAppearance">@style/CustomDetail</item>
+    </style>
+
+    <style name="MyTheme2" parent="ShowcaseView">
+        <item name="sv_backgroundColor">#D9252F38</item>
+        <item name="sv_showcaseColor">#28A69A</item>
+        <item name="sv_buttonText">Got it</item>
+        <item name="sv_titleTextAppearance">@style/CustomTitle</item>
+        <item name="sv_detailTextAppearance">@style/CustomDetail2</item>
     </style>
 
     <style name="CustomTitle" parent="TextAppearance.ShowcaseView.Title">
         <item name="android:textColor">#28A69A</item>
+    </style>
+
+    <style name="CustomDetail" parent="TextAppearance.ShowcaseView.Detail">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="CustomDetail2" parent="TextAppearance.ShowcaseView.Detail">
+        <item name="android:lineSpacingMultiplier">10.0</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
     <style name="LinearLayout"/>
@@ -97,5 +116,7 @@
            parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+
 
 </resources>

@@ -34,14 +34,14 @@ public class StatsActivity extends AppCompatActivity {
         TextView averageTime = (TextView) findViewById(R.id.averagetime);
 //        ImageView imageView = (ImageView) findViewById(R.id.close_button);
 
-//        currentStreak.setText(getCurrentStreak());
-//        longestStreak.setText(getLongestStreak());
-//        totalTime.setText(getTotalTime());
-//        averageTime.setText(getAverageTime());
-        currentStreak.setText("25 days");
-        longestStreak.setText("38 days");
-        totalTime.setText("145.2 hours");
-        averageTime.setText("20.9 min.");
+        currentStreak.setText(getCurrentStreak());
+        longestStreak.setText(getLongestStreak());
+        totalTime.setText(getTotalTime());
+        averageTime.setText(getAverageTime());
+//        currentStreak.setText("25 days");
+//        longestStreak.setText("38 days");
+//        totalTime.setText("145.2 hours");
+//        averageTime.setText("20.9 min.");
 //        imageView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
