@@ -1,5 +1,7 @@
 package ragone.io.quietmind;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -70,7 +72,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String lastDay;
     private int count = 0;
     private CoordinatorLayout coordinatorLayout;
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer bell1Player;
+    private MediaPlayer bell2Player;
+    private MediaPlayer vipassanaStartPlayer;
+    private MediaPlayer vipassanaEndPlayer;
     private int streak;
     private PlayPauseView playPauseView;
     private LinearLayout dayLayout;
@@ -326,11 +331,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     setInputFieldEnabled(false);
                     showSnackBar();
                     if (vipassanaMode.isChecked()) {
-                        mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.vipassanastart);
+                        vipassanaStartPlayer = MediaPlayer.create(MainActivity.this, R.raw.vipassanastart);
+                        vipassanaStartPlayer.start();
                     } else {
-                        mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.bell2);
+                        bell2Player = MediaPlayer.create(MainActivity.this, R.raw.bell2);
+                        bell2Player.start();
                     }
-                    mediaPlayer.start();
                     selectedIndex = wheelView.getSelectedPosition();
                     timer = new myCountDownTimer((selectedIndex + 1) * 60000, 1000).start();
                     setupNotification();
@@ -338,15 +344,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     setScreenDim(brightness);
                     audio.setRingerMode(ringer);
                     timer.cancel();
-                    mediaPlayer.stop();
-                    mediaPlayer.release();
-                    mediaPlayer = null;
+                    stopPlayers();
                     setInputFieldEnabled(true);
                     wheelView.smoothSelectIndex(selectedIndex);
                     removeNotification();
                 }
             }
         });
+    }
+
+    private void stopPlayers() {
+        if(vipassanaStartPlayer != null) {
+            vipassanaStartPlayer.stop();
+            vipassanaStartPlayer.release();
+            vipassanaStartPlayer = null;
+        }
+
+        if(vipassanaEndPlayer != null) {
+            vipassanaEndPlayer.stop();
+            vipassanaEndPlayer.release();
+            vipassanaEndPlayer = null;
+        }
+
+        if(bell1Player != null) {
+            bell1Player.stop();
+            bell1Player.release();
+            bell1Player = null;
+        }
+
+        if(bell2Player != null) {
+            bell2Player.stop();
+            bell2Player.release();
+            bell2Player = null;
+        }
     }
 
     private void removeNotification() {
@@ -384,9 +414,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
         removeNotification();
-        if(mediaPlayer != null) {
-            mediaPlayer.stop();
-        }
+        stopPlayers();
         if(timer != null) {
             timer.cancel();
         }
@@ -615,35 +643,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         saveData();
     }
 
-    private MediaPlayer vipassanaPlayer;
     private class myCountDownTimer extends CountDownTimer {
 
         public myCountDownTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
-            vipassanaPlayer = null;
+            vipassanaEndPlayer = null;
         }
 
         @Override
         public void onTick(long millisUntilFinished) {
             int timeLeftInMinutes = (int) Math.floor(millisUntilFinished / 60000);
             wheelView.smoothSelectIndex(timeLeftInMinutes);
-            if(vipassanaPlayer == null && millisUntilFinished < 809400 && vipassanaMode.isChecked()) {
-                vipassanaPlayer = MediaPlayer.create(MainActivity.this, R.raw.vipassanaend);
-                vipassanaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            if(vipassanaEndPlayer == null && millisUntilFinished < 809400 && vipassanaMode.isChecked()) {
+                vipassanaEndPlayer = MediaPlayer.create(MainActivity.this, R.raw.vipassanaend);
+                vipassanaEndPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
-                        vipassanaPlayer.release();
-                        vipassanaPlayer = null;
+                        vipassanaEndPlayer.release();
+                        vipassanaEndPlayer = null;
                     }
                 });
-                vipassanaPlayer.start();
+                vipassanaEndPlayer.start();
             }
 
 
             int interval = getInterval() * 60000;
             if(interval != 0 && millisUntilFinished > interval && millisUntilFinished % interval < 1000) {
-                mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.bell1);
-                mediaPlayer.start();
+                bell1Player = MediaPlayer.create(MainActivity.this, R.raw.bell1);
+                bell1Player.start();
                 Log.v("BELL", "INTERVAL BELL PLAYED at " + interval);
             }
 
@@ -657,8 +684,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onFinish() {
             if(!vipassanaMode.isChecked()) {
-                mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.bell1);
-                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                bell1Player = MediaPlayer.create(MainActivity.this, R.raw.bell1);
+                bell1Player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     int maxCount = 2;
 
                     @Override
@@ -674,7 +701,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     }
                 });
-                mediaPlayer.start();
+                bell1Player.start();
             }
             playPauseView.toggle();
             setScreenDim(brightness);
